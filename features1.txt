@@ -1,0 +1,36 @@
+Client wants software to track company assets like laptops, mobiles, furniture etc., and see which employee currently holds each asset.
+System should maintain records and allow easy tracking
+
+- Product Name: AssetTrackPro
+- Web-based system assumed
+- Added asset history tracking
+- Included login system
+
+- Each employee has unique ID
+- Assets assigned one at a time
+- Admin manages asset allocation
+- Data stored securely in database
+
+1. Employee Management
+   Add/edit/remove employee details.
+
+2. Asset Management
+   Add asset details like serial number, type, condition.
+
+3. Asset Assignment
+   Assign asset to employee and record date.
+
+4. Asset Return Tracking
+   Record asset return with condition update.
+
+5. Search Feature
+   Find asset by employee or asset ID.
+
+6. Reports
+   Generate asset usage reports.
+
+- Should employees login to check assets?
+- Need mobile app or only web?
+- Any approval workflow required?
+- Types of assets to track?
+- Need notifications/reminders?
