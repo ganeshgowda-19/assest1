@@ -1,0 +1,191 @@
+-- =========================================
+-- ASSET MANAGEMENT SYSTEM DATABASE DUMP
+-- PostgreSQL Compatible SQL Dump
+-- =========================================
+
+DROP DATABASE IF EXISTS company_asset_management;
+CREATE DATABASE company_asset_management;
+
+\c company_asset_management;
+
+-- =========================================
+-- HR & EMPLOYEE TABLES
+-- =========================================
+
+CREATE TABLE departments (
+    department_id SERIAL PRIMARY KEY,
+    department_name VARCHAR(100),
+    department_description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(100),
+    role_description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE employees (
+    employee_id SERIAL PRIMARY KEY,
+    employee_code VARCHAR(20),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    email VARCHAR(100),
+    phone VARCHAR(15),
+    department_id INT,
+    role_id INT,
+    hire_date DATE,
+    employment_status VARCHAR(20),
+    address TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE hr_staff (
+    hr_staff_id SERIAL PRIMARY KEY,
+    employee_id INT,
+    access_level VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================================
+-- ASSET MANAGEMENT TABLES
+-- =========================================
+
+CREATE TABLE asset_categories (
+    category_id SERIAL PRIMARY KEY,
+    category_name VARCHAR(100),
+    category_description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE assets (
+    asset_id SERIAL PRIMARY KEY,
+    asset_tag VARCHAR(50),
+    asset_name VARCHAR(150),
+    category_id INT,
+    purchase_date DATE,
+    purchase_cost NUMERIC(10,2),
+    vendor VARCHAR(150),
+    warranty_expiry DATE,
+    asset_status VARCHAR(50),
+    asset_condition VARCHAR(50),
+    location VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE asset_allocations (
+    allocation_id SERIAL PRIMARY KEY,
+    asset_id INT,
+    employee_id INT,
+    allocation_date DATE,
+    expected_return_date DATE,
+    actual_return_date DATE,
+    allocation_status VARCHAR(50),
+    remarks TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE asset_maintenance (
+    maintenance_id SERIAL PRIMARY KEY,
+    asset_id INT,
+    maintenance_type VARCHAR(100),
+    maintenance_date DATE,
+    maintenance_cost NUMERIC(10,2),
+    vendor VARCHAR(150),
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================================
+-- LOGIN & SYSTEM MANAGEMENT
+-- =========================================
+
+CREATE TABLE system_users (
+    user_id SERIAL PRIMARY KEY,
+    employee_id INT,
+    username VARCHAR(50),
+    password_hash TEXT,
+    user_role VARCHAR(50),
+    account_status VARCHAR(20),
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE audit_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INT,
+    action_type VARCHAR(100),
+    action_description TEXT,
+    action_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(50)
+);
+
+-- =========================================
+-- SAMPLE DATA INSERTION
+-- =========================================
+
+INSERT INTO departments (department_name, department_description)
+VALUES
+('IT', 'Information Technology Department'),
+('HR', 'Human Resource Department'),
+('Finance', 'Finance Department'),
+('Admin', 'Administration');
+
+INSERT INTO roles (role_name, role_description)
+VALUES
+('Manager', 'Department Manager'),
+('Engineer', 'Technical Staff'),
+('HR Executive', 'HR Team'),
+('Accountant', 'Finance Staff');
+
+INSERT INTO employees
+(employee_code, first_name, last_name, email, phone, department_id, role_id, hire_date, employment_status, address)
+VALUES
+('EMP001','Rahul','Sharma','rahul@company.com','9876543210',1,2,'2022-01-15','Active','Bangalore'),
+('EMP002','Sneha','Reddy','sneha@company.com','9123456780',2,3,'2023-03-20','Active','Hyderabad'),
+('EMP003','Amit','Patel','amit@company.com','9012345678',3,4,'2021-07-10','Active','Mumbai');
+
+INSERT INTO hr_staff (employee_id, access_level)
+VALUES
+(2,'Full');
+
+INSERT INTO asset_categories (category_name, category_description)
+VALUES
+('Laptop','Company laptops'),
+('Mobile','Company mobile phones'),
+('Furniture','Office furniture'),
+('Accessories','IT accessories');
+
+INSERT INTO assets
+(asset_tag, asset_name, category_id, purchase_date, purchase_cost, vendor, warranty_expiry, asset_status, asset_condition, location)
+VALUES
+('AST001','Dell Latitude Laptop',1,'2024-01-10',75000,'Dell Vendor','2027-01-10','Allocated','Good','Bangalore'),
+('AST002','iPhone 13',2,'2023-11-05',65000,'Apple Vendor','2026-11-05','Available','Excellent','Store'),
+('AST003','Office Chair',3,'2022-08-12',8000,'Furniture Mart','2025-08-12','Available','Good','Office');
+
+INSERT INTO asset_allocations
+(asset_id, employee_id, allocation_date, expected_return_date, allocation_status, remarks)
+VALUES
+(1,1,'2024-02-01','2026-02-01','Allocated','Work Laptop');
+
+INSERT INTO asset_maintenance
+(asset_id, maintenance_type, maintenance_date, maintenance_cost, vendor, notes)
+VALUES
+(1,'Service','2024-06-10',2000,'Dell Service','Routine maintenance');
+
+INSERT INTO system_users
+(employee_id, username, password_hash, user_role, account_status)
+VALUES
+(1,'rahul','hashedpass1','Employee','Active'),
+(2,'sneha','hashedpass2','HR','Active');
+
+INSERT INTO audit_logs
+(user_id, action_type, action_description, ip_address)
+VALUES
+(1,'LOGIN','User logged in','192.168.1.1'),
+(2,'ASSET ALLOCATION','Allocated laptop to employee','192.168.1.2');
+
+-- =========================================
+-- END OF DATABASE DUMP
+-- =========================================
